@@ -27,4 +27,11 @@ public interface LoginUserDataAccessInterface {
      */
     User get(String username);
 
+    /**
+     * new method to track current user
+     * @param name
+     */
+    void setCurrentUser(String name);
+
+    String getCurrentUser();
 }

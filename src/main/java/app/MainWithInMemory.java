@@ -6,8 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.DBUserDataAccessObject;
-import entity.CommonUserFactory;
+import data_access.InMemoryUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
@@ -18,12 +17,12 @@ import view.SignupView;
 import view.ViewManager;
 
 /**
- * The version of Main with an external database used to persist user data.
+ * The version of Main using in-memory storage for user data.
  */
-public class MainWithDB {
+public class MainWithInMemory {
 
     /**
-     * The main method for starting the program with an external database used to persist user data.
+     * The main method for starting the program with in-memory user data.
      * @param args input to main
      */
     public static void main(String[] args) {
@@ -52,18 +51,19 @@ public class MainWithDB {
         final LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         final SignupViewModel signupViewModel = new SignupViewModel();
 
-        final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
+        // Changed to use InMemoryUserDataAccessObject
+        final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
 
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                                  signupViewModel, userDataAccessObject);
+                signupViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                               loggedInViewModel, userDataAccessObject);
+                loggedInViewModel, userDataAccessObject);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
-                                                                              loggedInViewModel, userDataAccessObject);
+                loggedInViewModel, userDataAccessObject);
         views.add(loggedInView, loggedInView.getViewName());
 
         viewManagerModel.setState(signupView.getViewName());
